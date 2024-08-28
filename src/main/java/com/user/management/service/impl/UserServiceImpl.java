@@ -2,10 +2,14 @@ package com.user.management.service.impl;
 
 import com.user.management.config.BusinessException;
 import com.user.management.dto.*;
+import com.user.management.enums.Role;
 import com.user.management.models.User;
+import com.user.management.repository.TokenRepository;
 import com.user.management.repository.UserRepository;
+import com.user.management.service.AuthenticationService;
 import com.user.management.service.UserService;
 import com.user.management.specification.UserSpecification;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+//@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -39,6 +45,7 @@ public class UserServiceImpl implements UserService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(request.getPassword())
+                .role(Role.ADMIN)
                 .build();
 
         userRepository.save(user);
@@ -151,5 +158,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return list;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

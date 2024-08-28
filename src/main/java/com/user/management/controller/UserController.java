@@ -2,8 +2,11 @@ package com.user.management.controller;
 
 import com.user.management.config.BusinessException;
 import com.user.management.dto.*;
+import com.user.management.service.AuthenticationService;
 import com.user.management.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +17,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user/")
+@RequiredArgsConstructor
+@SecurityRequirement(name = "Authorization")
 public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    private final AuthenticationService authenticationService;
 
     @GetMapping("/hello/{name}")
     @ResponseBody
@@ -39,6 +47,7 @@ public class UserController {
 
     @PostMapping("/create")
     public GeneralResponse<CreateUserResponse> createUser(@Valid @RequestBody CreateUserRequest request) throws BusinessException {
+        request.setPassword(authenticationService.encodePassword(request.getPassword()));
         return userService.saveUser(request);
     }
 

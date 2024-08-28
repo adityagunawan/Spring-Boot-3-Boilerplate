@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateUserResponse {
-    private Long id;
+    private Integer id;
     private String name;
     private String email;
     private String username;

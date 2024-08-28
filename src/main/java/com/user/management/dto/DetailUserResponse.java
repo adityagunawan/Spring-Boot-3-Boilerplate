@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class DetailUserResponse {
-    private Long id;
+    private Integer id;
     private String name;
     private String username;
     private String email;
